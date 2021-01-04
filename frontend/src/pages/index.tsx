@@ -1,12 +1,19 @@
-import React from "react";
 import { Layout } from "../components/Layout";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { usePostsQuery } from "../generated/graphql";
 
 const Index = () => {
+  const [{ data }] = usePostsQuery();
   return (
     <Layout>
-      <h1>asdasd</h1>
+      {!data ? (
+        <div>loading</div>
+      ) : (
+        data.posts.map((p) => <div key={p.id}>{p.title}</div>)
+      )}
     </Layout>
   );
 };
 
-export default Index;
+export default withUrqlClient(createUrqlClient, { ssr: true })(Index);

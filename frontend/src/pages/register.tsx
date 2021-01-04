@@ -4,6 +4,9 @@ import { InputField } from "../components/InputField";
 import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { withUrqlClient } from "next-urql";
+import NextLink from "next/link";
 
 interface registerProps {}
 
@@ -39,13 +42,10 @@ const Register: React.FC<registerProps> = ({}) => {
               username: "",
               email: "",
               password: "",
-              confirmpassword: "",
+              confirmPassword: "",
             }}
             onSubmit={async (values, { setErrors }) => {
-              const response = await register({
-                username: values.username,
-                password: values.password,
-              });
+              const response = await register({ options: values });
               if (response.data?.register.errors) {
                 setErrors(toErrorMap(response.data.register.errors));
                 // } else if (response.data?.register.user) {
@@ -76,22 +76,14 @@ const Register: React.FC<registerProps> = ({}) => {
                   type="password"
                 />
                 <InputField
-                  name="confirmpassword"
-                  placeholder="Confirm Password"
-                  label="Confirm Password"
+                  name="confirmPassword"
+                  placeholder="Confirm password"
+                  label="Confirm password"
                   type="password"
                 />
-                <div className="mt-2 text-right">
-                  <a
-                    href="#"
-                    className="text-sm font-semibold leading-relaxed text-gray-700 hover:text-blue-700 focus:text-blue-700"
-                  >
-                    Forgot Password?
-                  </a>
-                </div>
                 <button
                   type="submit"
-                  className="block w-full px-4 py-3 mt-6 font-semibold text-white transition duration-500 ease-in-out transform rounded-lg bg-gradient-to-r from-blue-700 hover:from-blue-600 to-blue-600 hover:to-blue-700 focus:shadow-outline focus:outline-none"
+                  className="block w-full px-4 py-3 mt-10 font-semibold text-white transition duration-500 ease-in-out transform rounded-lg bg-gradient-to-r from-blue-700 hover:from-blue-600 to-blue-600 hover:to-blue-700 focus:shadow-outline focus:outline-none"
                 >
                   Sign Up
                 </button>
@@ -99,13 +91,10 @@ const Register: React.FC<registerProps> = ({}) => {
             )}
           </Formik>
           <p className="mt-8 text-center">
-            Need an account?
-            <a
-              href="#"
-              className="font-semibold text-blue-500 hover:text-blue-400"
-            >
-              Sign Up
-            </a>
+            Already have an account?
+            <span className="font-semibold text-blue-500 hover:text-blue-400">
+              <NextLink href="/login"> Login</NextLink>
+            </span>
           </p>
         </div>
       </div>
@@ -113,4 +102,4 @@ const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default Register;
+export default withUrqlClient(createUrqlClient)(Register);

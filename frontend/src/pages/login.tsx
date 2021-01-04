@@ -4,6 +4,9 @@ import { InputField } from "../components/InputField";
 import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import { withUrqlClient } from "next-urql";
+import NextLink from "next/link";
 
 interface loginProps {}
 
@@ -36,17 +39,12 @@ const Login: React.FC<loginProps> = ({}) => {
           </h1>
           <Formik
             initialValues={{
-              username: "",
-              email: "",
+              usernameOrEmail: "",
               password: "",
-              confirmpassword: "",
             }}
             onSubmit={async (values, { setErrors }) => {
               console.log(values);
-              const response = await login({
-                username: values.username,
-                password: values.password,
-              });
+              const response = await login(values);
               if (response.data?.login.errors) {
                 setErrors(toErrorMap(response.data.login.errors));
                 // } else if (response.data?.login.user) {
@@ -59,9 +57,9 @@ const Login: React.FC<loginProps> = ({}) => {
             {({ isSubmitting }) => (
               <Form>
                 <InputField
-                  name="username"
-                  placeholder="Username"
-                  label="Username"
+                  name="usernameOrEmail"
+                  placeholder="Username or email"
+                  label="Username or email"
                   type="username"
                 />
                 <InputField
@@ -71,12 +69,11 @@ const Login: React.FC<loginProps> = ({}) => {
                   type="password"
                 />
                 <div className="mt-2 text-right">
-                  <a
-                    href="#"
-                    className="text-sm font-semibold leading-relaxed text-gray-700 hover:text-blue-700 focus:text-blue-700"
-                  >
-                    Forgot Password?
-                  </a>
+                  <p className="text-sm font-semibold leading-relaxed text-gray-700 hover:text-blue-700 focus:text-blue-700">
+                    <NextLink href="/forgot-password">
+                      Forgot Password?
+                    </NextLink>
+                  </p>
                 </div>
                 <button
                   type="submit"
@@ -88,13 +85,10 @@ const Login: React.FC<loginProps> = ({}) => {
             )}
           </Formik>
           <p className="mt-8 text-center">
-            Need an account?
-            <a
-              href="#"
-              className="font-semibold text-blue-500 hover:text-blue-400"
-            >
-              Login
-            </a>
+            Don't have an account?
+            <span className="font-semibold text-blue-500 hover:text-blue-400">
+              <NextLink href="/register"> Sign up</NextLink>
+            </span>
           </p>
         </div>
       </div>
@@ -102,4 +96,4 @@ const Login: React.FC<loginProps> = ({}) => {
   );
 };
 
-export default Login;
+export default withUrqlClient(createUrqlClient)(Login);
