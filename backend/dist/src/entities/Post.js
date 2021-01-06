@@ -13,6 +13,7 @@ exports.Post = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const User_1 = require("./User");
+const Like_1 = require("./Like");
 let Post = class Post extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -36,14 +37,23 @@ __decorate([
     __metadata("design:type", Number)
 ], Post.prototype, "points", void 0);
 __decorate([
+    type_graphql_1.Field(() => type_graphql_1.Int, { defaultValue: 0 }),
+    __metadata("design:type", Number)
+], Post.prototype, "voteStatus", void 0);
+__decorate([
     type_graphql_1.Field(),
     typeorm_1.Column(),
     __metadata("design:type", Number)
 ], Post.prototype, "creatorId", void 0);
 __decorate([
+    type_graphql_1.Field(),
     typeorm_1.ManyToOne(() => User_1.User, (user) => user.posts),
     __metadata("design:type", User_1.User)
 ], Post.prototype, "creator", void 0);
+__decorate([
+    typeorm_1.OneToMany(() => Like_1.Like, (like) => like.post),
+    __metadata("design:type", Array)
+], Post.prototype, "likes", void 0);
 __decorate([
     type_graphql_1.Field(() => String),
     typeorm_1.CreateDateColumn(),

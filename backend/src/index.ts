@@ -14,6 +14,8 @@ import cors from "cors";
 import { createConnection } from "typeorm";
 import { User } from "./entities/User";
 import { Post } from "./entities/Post";
+import { Like } from "./entities/Like";
+import path from "path";
 
 const main = async () => {
   const conn = await createConnection({
@@ -23,9 +25,11 @@ const main = async () => {
     password: __password__,
     logging: true,
     synchronize: true,
-    entities: [Post, User],
+    migrations: [path.join(__dirname, "./migrations/*")],
+    entities: [Post, User, Like],
   });
-
+  await conn.runMigrations();
+  // await Post.delete({});
   const app = express();
 
   const RedisStore = connectRedis(session);
