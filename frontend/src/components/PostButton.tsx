@@ -15,6 +15,7 @@ export const PostButton: React.FC<PostButtonProps> = ({ icon, post }) => {
       } items-center transition hover:text-red-500`}
     >
       <button
+        // className="z-50"
         onClick={() => {
           if (icon === "share") {
           }
