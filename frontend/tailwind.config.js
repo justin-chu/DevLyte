@@ -1,5 +1,9 @@
 module.exports = {
-  purge: ['./pages/*.tsx', './components/*.tsx'],
+  purge: [
+    "./src/pages/*.{js,ts,jsx,tsx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx}",
+    "./src/components/*.{js,ts,jsx,tsx}",
+  ],
   darkMode: "class",
   i18n: {
     locales: ["en-US"],
@@ -25,4 +29,4 @@ module.exports = {
   future: {
     purgeLayersByDefault: true,
   },
-}
+};

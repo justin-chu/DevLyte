@@ -10,8 +10,11 @@ const Index = () => {
     limit: 15,
     cursor: null as null | string,
   });
-  const [{ data, fetching }] = usePostsQuery({ variables: { limit: 15 } });
+  const [{ data, error, fetching }] = usePostsQuery({
+    variables: { limit: 15 },
+  });
   if (!fetching && !data) {
+    // console.log(error);
     return <div>No posts</div>;
   }
 

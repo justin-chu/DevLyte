@@ -17,7 +17,7 @@ export const Post: React.FC<PostProps> = ({ post }) => {
   TimeAgo.addLocale(en);
   const timeAgo = new TimeAgo("en-US");
   const date = timeAgo.format(parseInt(post.createdAt));
-  const [more, setMore] = useState(true);
+  const [more, setMore] = useState(false);
   const [, deletePost] = useDeletePostMutation();
   const [{ data: me }] = useMeQuery();
 

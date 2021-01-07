@@ -17,6 +17,7 @@ import {
 import { Post } from "../entities/Post";
 import { Like } from "../entities/Like";
 import { getConnection } from "typeorm";
+import { User } from "../entities/User";
 
 @InputType()
 class PostInput {
@@ -39,6 +40,23 @@ export class PostResolver {
   @FieldResolver(() => String)
   textSnippet(@Root() root: Post) {
     return root.text.slice(0, 200);
+  }
+
+  @FieldResolver(() => User)
+  creator(@Root() post: Post, @Ctx() { userLoader }: MyContext) {
+    return userLoader.load(post.creatorId);
+  }
+
+  @FieldResolver(() => Int)
+  async voteStatus(@Root() post: Post, @Ctx() { likeLoader, req }: MyContext) {
+    if (!req.session.userId) {
+      return null;
+    }
+    const like = await likeLoader.load({
+      postId: post.id,
+      userId: parseInt(req.session.userId),
+    });
+    return like ? like.voted : 0;
   }
 
   @Mutation(() => Boolean)
@@ -98,39 +116,27 @@ export class PostResolver {
   @Query(() => PaginatedPosts)
   async posts(
     @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
-    @Ctx() { req }: MyContext
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+    // @Ctx() { req }: MyContext
   ): Promise<PaginatedPosts> {
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
 
     const replacements: any[] = [realLimitPlusOne];
-    // if (req.session.userId) {
-    //   replacements.push(req.session.userId);
-    // }
-    let index = 3;
     if (cursor) {
       replacements.push(new Date(parseInt(cursor)));
-      index = replacements.length;
     }
 
+    // ,
+    // ${
+    //   req.session.userId
+    //     ? `(select voted from "like" where "userId" = ${req.session.userId} and "postId" = p.id) "voteStatus"`
+    //     : '0 as "voteStatus"'
+    // }
     const posts = await getConnection().query(
       `
-    select p.*, 
-    json_build_object(
-      'id', u.id,
-      'username', u.username,
-      'email', u.email,
-      'createdAt', u."createdAt",
-      'updatedAt', u."updatedAt"
-      ) creator,
-      ${
-        req.session.userId
-          ? `(select voted from "like" where "userId" = ${req.session.userId} and "postId" = p.id) "voteStatus"`
-          : '0 as "voteStatus"'
-      }
+    select p.*
     from post p
-    inner join public.user u on u.id = p."creatorId"
     ${cursor ? `where p."createdAt" < $2` : ""}
     order by p."createdAt" DESC
     limit $1
@@ -146,7 +152,7 @@ export class PostResolver {
 
   @Query(() => Post, { nullable: true })
   post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
-    return Post.findOne(id, { relations: ["creator"] });
+    return Post.findOne(id);
   }
 
   @Mutation(() => Post)
