@@ -9,7 +9,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     <>
       <Navbar />
       <div className="w-full">
-        <div className="max-w-screen-xl m-auto">{children}</div>
+        <div>{children}</div>
       </div>
       <Footer />
     </>

@@ -6,7 +6,7 @@ interface FooterProps {}
 export const Footer: React.FC<FooterProps> = ({}) => {
   return (
     <footer className="bg-gray-800 pt-10 sm:mt-10 pt-10 flex flex-col flex-wrap content-center">
-      <div className="max-w-4xl text-gray-800 grid gap-24 grid-cols-2 md:grid-cols-4 justify-items-center">
+      <div className="max-w-4xl text-gray-800 grid gap-10 md:gap-24 grid-cols-2 md:grid-cols-4 mb-4">
         <div>
           <div className="text-sm uppercase text-gray-200 font-medium mb-6">
             For developers
