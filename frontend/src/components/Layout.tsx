@@ -9,7 +9,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     <>
       <Navbar />
       <div className="w-full">
-        <div>{children}</div>
+        <div className="mt-12 sm:mt-0">{children}</div>
       </div>
       <Footer />
     </>

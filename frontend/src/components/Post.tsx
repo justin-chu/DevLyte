@@ -23,12 +23,14 @@ export const Post: React.FC<PostProps> = ({ post }) => {
 
   return (
     <NextLink key={post.id} href="/post/[id]" as={`/post/${post.id}`}>
-      <div className="cursor-pointer transition-shadow rounded-2xl mb-4 my-2 hover:bg-white-900 hover:shadow-md">
+      <div className="transition-shadow rounded-2xl mb-4 my-2 hover:bg-white-900 hover:shadow-md cursor-pointer">
+        {/* <NextLink key={post.id} href="/post/[id]" as={`/post/${post.id}`}> */}
         <img
-          className="rounded-2xl bg-white dark:bg-gray-800 w-max h-56"
+          className="rounded-2xl bg-white dark:bg-gray-800 w-max h-56 cursor-pointer"
           src="https://dummyimage.com/600x500/F3F4F7/64748b"
           alt=""
         />
+        {/* </NextLink> */}
         <div className="px-4 py-5">
           <ul className="flex items-center py-0.5 pb-2 gap-4 overflow-x-auto disable-scrollbars">
             <li>
@@ -72,10 +74,14 @@ export const Post: React.FC<PostProps> = ({ post }) => {
               </span>
             </li>
           </ul>
+          {/* <NextLink key={post.id} href="/post/[id]" as={`/post/${post.id}`}>
+          <> */}
           <p className="text-gray-600 dark:text-gray-100 text-xl font-bold mx-1">
             {post.title}
           </p>
           <p className="text-gray-400 text-sm my-2 mx-1">{post.textSnippet}</p>
+          {/* </>
+        </NextLink> */}
           <div className="mt-3 flex justify-between">
             <a className="flex items-center" href="#">
               <img
@@ -188,11 +194,9 @@ export const Post: React.FC<PostProps> = ({ post }) => {
                   </div>
                 )}
               </button>
-              <div className="flex gap-2">
-                <PostButton icon="share" post={post} />
-                <PostButton icon="comment" post={post} />
-                <PostButton icon="like" post={post} />
-              </div>
+              <PostButton icon="share" post={post} />
+              <PostButton icon="comment" post={post} />
+              <PostButton icon="like" post={post} />
             </div>
           </div>
         </div>

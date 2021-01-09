@@ -219,7 +219,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 sm:relative bg-white border-b">
+    <nav className="fixed left-0 right-0 top-0 z-50 sm:relative bg-white border-b">
       <OutsideClickHandler onOutsideClick={() => closeNav()}>
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="relative flex items-center justify-between h-16">
@@ -314,7 +314,7 @@ export const Navbar = () => {
               <div>
                 {!fetching && data?.me ? (
                   <div className="flex flex-col">
-                    <div className="flex gap-2 py-2">
+                    <div className="flex gap-4 py-2">
                       <img
                         className="h-8 w-8 rounded-full"
                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
