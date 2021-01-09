@@ -188,9 +188,11 @@ export const Post: React.FC<PostProps> = ({ post }) => {
                   </div>
                 )}
               </button>
-              <PostButton icon="share" post={post} />
-              <PostButton icon="comment" post={post} />
-              <PostButton icon="like" post={post} />
+              <div className="flex gap-2">
+                <PostButton icon="share" post={post} />
+                <PostButton icon="comment" post={post} />
+                <PostButton icon="like" post={post} />
+              </div>
             </div>
           </div>
         </div>

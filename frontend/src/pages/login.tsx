@@ -14,26 +14,27 @@ const Login: React.FC<loginProps> = ({}) => {
   const router = useRouter();
   const [, login] = useLoginMutation();
   return (
-    <section className="flex flex-col items-center h-screen md:flex-row ">
-      <div className="relative hidden w-full h-screen bg-gray-400 lg:block md:w-1/3 xl:w-1/3">
+    <section className="max-w-md mx-auto my-10 md:my-0 md:max-w-none md:mx-0 flex flex-col items-center h-screen md:flex-row ">
+      <div className="relative block w-full md:h-screen md:bg-gray-400 lg:block md:w-1/3 xl:w-1/3">
         <img
           src="https://dummyimage.com/600x500/F3F4F7/64748b"
           alt=""
-          className="absolute object-cover w-full h-full"
+          className="absolute object-cover w-full h-full hidden md:flex"
         />
-        <div className="relative z-10 m-12 text-left">
-          <a className="flex items-center w-32 mb-4 font-medium text-gray-900 title-font md:mb-6">
-            {/* <img src="./dist/badges/WhitePink.svg" alt="" /> */}
-          </a>
-          <h1 className="mb-2 text-2xl font-semibold tracking-tighter text-blue-700 tsm:text-5xl title-font">
-            Discover 100+
-            <br />
-            screens ready to use.
-          </h1>
+        <div className="relative z-10 m-6 md:m-12 text-left">
+          <NextLink href="/">
+            <div className="flex-shrink-0 flex items-center cursor-pointer">
+              <img
+                className="block h-8 w-auto"
+                src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
+                alt="Workflow"
+              />
+            </div>
+          </NextLink>
         </div>
       </div>
-      <div className="flex w-full h-screen px-6 bg-blue-1300 md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 lg:px-16 xl:px-12 items-left justify-left">
-        <div className="w-full py-32 lg:py-6 lg:h-100">
+      <div className="flex w-full md:h-screen px-6 bg-blue-1300 md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 lg:px-16 xl:px-12 items-left justify-left">
+        <div className="w-full md:py-32 lg:py-6 lg:h-100">
           <h1 className="my-12 text-2xl font-semibold tracking-tighter text-blue-700 sm:text-3xl title-font">
             Login
           </h1>
