@@ -1,7 +1,5 @@
-import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
 import { Comment, useCommentMutation } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface CommentsProps {
   id: number;
@@ -73,5 +71,3 @@ export const Comments: React.FC<CommentsProps> = ({ id, comments }) => {
     </div>
   );
 };
-
-export default withUrqlClient(createUrqlClient, { ssr: true })(Comments);

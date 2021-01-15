@@ -1,0 +1,7 @@
+Create and deploy new database:
+    1. Create new database locally (pgAdmin 4)
+    2. Change database name in ormconfig.json and .env
+    3. Delete dist and all migrations
+    4. Run `npx typeorm migration:create -n MigrationName`
+    5. Run `yarn watch`
+    6. Run `./deploy.sh`
