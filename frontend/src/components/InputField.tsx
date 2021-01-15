@@ -36,7 +36,6 @@ export const InputField: React.FC<InputFieldProps> = ({
           id={field.name}
           placeholder={props.placeholder}
           className="w-full px-4 py-2 mt-2 text-base bg-gray-100 border-transparent rounded-lg ext-blue-700 focus:border-gray-500"
-          autoFocus={true}
           required
         />
       )}

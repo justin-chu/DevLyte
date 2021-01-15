@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type Query = {
@@ -45,9 +47,11 @@ export type Post = {
   title: Scalars['String'];
   text: Scalars['String'];
   points: Scalars['Float'];
+  numComments: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
   creatorId: Scalars['Float'];
   creator: User;
+  comments?: Maybe<Array<Comment>>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -62,8 +66,19 @@ export type User = {
   updatedAt: Scalars['String'];
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['Float'];
+  text: Scalars['String'];
+  userId: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+
 export type Mutation = {
   __typename?: 'Mutation';
+  comment: Scalars['Boolean'];
   vote: Scalars['Boolean'];
   createPost: Post;
   updatePost?: Maybe<Post>;
@@ -73,6 +88,12 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+};
+
+
+export type MutationCommentArgs = {
+  text: Scalars['String'];
+  postId: Scalars['Int'];
 };
 
 
@@ -151,7 +172,7 @@ export type ErrorFragmentFragment = (
 
 export type PostFragmentFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'textSnippet' | 'points' | 'voteStatus'>
+  & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'textSnippet' | 'points' | 'voteStatus' | 'numComments'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -187,6 +208,17 @@ export type ChangePasswordMutation = (
     { __typename?: 'UserResponse' }
     & UserResponseFragmentFragment
   ) }
+);
+
+export type CommentMutationVariables = Exact<{
+  text: Scalars['String'];
+  postId: Scalars['Int'];
+}>;
+
+
+export type CommentMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'comment'>
 );
 
 export type CreatePostMutationVariables = Exact<{
@@ -303,7 +335,10 @@ export type PostQuery = (
   & { post?: Maybe<(
     { __typename?: 'Post' }
     & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title' | 'text' | 'points' | 'voteStatus'>
-    & { creator: (
+    & { comments?: Maybe<Array<(
+      { __typename?: 'Comment' }
+      & Pick<Comment, 'id' | 'text' | 'userId' | 'createdAt' | 'updatedAt'>
+    )>>, creator: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
     ) }
@@ -337,6 +372,7 @@ export const PostFragmentFragmentDoc = gql`
   textSnippet
   points
   voteStatus
+  numComments
   creator {
     id
     username
@@ -380,6 +416,15 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CommentDocument = gql`
+    mutation Comment($text: String!, $postId: Int!) {
+  comment(text: $text, postId: $postId)
+}
+    `;
+
+export function useCommentMutation() {
+  return Urql.useMutation<CommentMutation, CommentMutationVariables>(CommentDocument);
 };
 export const CreatePostDocument = gql`
     mutation CreatePost($input: PostInput!) {
@@ -491,6 +536,13 @@ export const PostDocument = gql`
     text
     points
     voteStatus
+    comments {
+      id
+      text
+      userId
+      createdAt
+      updatedAt
+    }
     creator {
       id
       username

@@ -76,6 +76,14 @@ const invalidateAllPosts = (cache: Cache) => {
   });
 };
 
+const invalidateAllComments = (cache: Cache) => {
+  const allFields = cache.inspectFields("Query");
+  const fieldInfos = allFields.filter((info) => info.fieldName === "comments");
+  fieldInfos.forEach((fi) => {
+    cache.invalidate("Query", "comments", fi.arguments || {});
+  });
+};
+
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {
   let cookie = "";
   if (isServer()) {
@@ -100,6 +108,17 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
+            comment: (_result, args, cache, info) => {
+              // const { postId } = args as VoteMutationVariables;
+              // cache.writeFragment(
+              //   gql`
+              //     fragment __ on Post {
+              //       comments
+              //       # voteStatus
+              //     }
+              //   `,
+              //   { id: postId, comments }
+            },
             deletePost: (_result, args, cache, info) => {
               cache.invalidate({
                 __typename: "Post",

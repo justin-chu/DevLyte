@@ -9,15 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DummyPosts1609804629257 = void 0;
-class DummyPosts1609804629257 {
-    up(_) {
+exports.PostComments1610680076093 = void 0;
+class PostComments1610680076093 {
+    up(queryRunner) {
         return __awaiter(this, void 0, void 0, function* () {
         });
     }
-    down(_) {
-        return __awaiter(this, void 0, void 0, function* () { });
+    down(queryRunner) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
     }
 }
-exports.DummyPosts1609804629257 = DummyPosts1609804629257;
-//# sourceMappingURL=1609804629257-DummyPosts.js.map
+exports.PostComments1610680076093 = PostComments1610680076093;
+//# sourceMappingURL=1610680076093-PostComments.js.map

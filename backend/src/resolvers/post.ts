@@ -47,6 +47,14 @@ export class PostResolver {
     return userLoader.load(post.creatorId);
   }
 
+  // @FieldResolver(() => Comment)
+  // comments(@Root() post: Post, @Ctx() { commentLoader, req }: MyContext) {
+  //   return commentLoader.load({
+  //     postId: post.id,
+  //     userId: parseInt(req.session.userId),
+  //   });
+  // }
+
   @FieldResolver(() => Int)
   async voteStatus(@Root() post: Post, @Ctx() { likeLoader, req }: MyContext) {
     if (!req.session.userId) {
@@ -57,6 +65,36 @@ export class PostResolver {
       userId: parseInt(req.session.userId),
     });
     return like ? like.voted : 0;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async comment(
+    @Arg("postId", () => Int) postId: number,
+    @Arg("text") text: string,
+    @Ctx() { req }: MyContext
+  ) {
+    const { userId } = req.session;
+    await getConnection().transaction(async (tm) => {
+      await tm.query(
+        `
+        insert into "comment" ("userId", "postId", text)
+        values ($1,$2,$3)
+      `,
+        [userId, postId, text]
+      );
+
+      await tm.query(
+        `
+        update post
+        set "numComments" = "numComments" + 1
+        where id = $1
+      `,
+        [postId]
+      );
+    });
+
+    return true;
   }
 
   @Mutation(() => Boolean)
@@ -116,8 +154,8 @@ export class PostResolver {
   @Query(() => PaginatedPosts)
   async posts(
     @Arg("limit", () => Int) limit: number,
-    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
-    // @Ctx() { req }: MyContext
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
+    @Ctx() { req }: MyContext
   ): Promise<PaginatedPosts> {
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;

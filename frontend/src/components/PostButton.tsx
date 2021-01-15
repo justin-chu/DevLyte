@@ -55,7 +55,7 @@ export const PostButton: React.FC<PostButtonProps> = ({ icon, post }) => {
         </svg>
       </button>
       {icon === "share" && "21"}
-      {icon === "comment" && "304"}
+      {icon === "comment" && post.numComments}
       {icon === "like" && post.points}
     </div>
   );

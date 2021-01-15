@@ -29,16 +29,18 @@ const typeorm_1 = require("typeorm");
 const User_1 = require("./entities/User");
 const Post_1 = require("./entities/Post");
 const Like_1 = require("./entities/Like");
+const Comment_1 = require("./entities/Comment");
 const path_1 = __importDefault(require("path"));
 const createUserLoader_1 = require("./utils/createUserLoader");
 const createLikeLoader_1 = require("./utils/createLikeLoader");
+const createCommentLoader_1 = require("./utils/createCommentLoader");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield typeorm_1.createConnection({
         type: "postgres",
         url: process.env.DATABASE_URL,
         logging: true,
         migrations: [path_1.default.join(__dirname, "./migrations/*")],
-        entities: [Post_1.Post, User_1.User, Like_1.Like],
+        entities: [Post_1.Post, User_1.User, Like_1.Like, Comment_1.Comment],
     });
     yield conn.runMigrations();
     const app = express_1.default();
@@ -77,6 +79,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             redis,
             userLoader: createUserLoader_1.createUserLoader(),
             likeLoader: createLikeLoader_1.createLikeLoader(),
+            commentLoader: createCommentLoader_1.createCommentLoader(),
         }),
     });
     apolloServer.applyMiddleware({

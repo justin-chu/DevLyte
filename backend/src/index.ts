@@ -15,9 +15,11 @@ import { createConnection } from "typeorm";
 import { User } from "./entities/User";
 import { Post } from "./entities/Post";
 import { Like } from "./entities/Like";
+import { Comment } from "./entities/Comment";
 import path from "path";
 import { createUserLoader } from "./utils/createUserLoader";
 import { createLikeLoader } from "./utils/createLikeLoader";
+import { createCommentLoader } from "./utils/createCommentLoader";
 
 const main = async () => {
   const conn = await createConnection({
@@ -26,10 +28,9 @@ const main = async () => {
     logging: true,
     // synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Post, User, Like],
+    entities: [Post, User, Like, Comment],
   });
   await conn.runMigrations();
-  // await Post.delete({});
   const app = express();
 
   const RedisStore = connectRedis(session);
@@ -73,6 +74,7 @@ const main = async () => {
       redis,
       userLoader: createUserLoader(),
       likeLoader: createLikeLoader(),
+      commentLoader: createCommentLoader(),
     }),
   });
 

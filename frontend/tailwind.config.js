@@ -15,6 +15,11 @@ module.exports = {
         check: "url('/icons/check.svg')",
         landscape: "url('/images/landscape/2.jpg')",
       }),
+      spacing: {
+        128: "30rem",
+        156: "36rem",
+        172: "42rem",
+      },
     },
   },
   variants: {

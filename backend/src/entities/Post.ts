@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { User } from "./User";
 import { Like } from "./Like";
+import { Comment } from "./Comment";
 
 @ObjectType()
 @Entity()
@@ -31,6 +32,10 @@ export class Post extends BaseEntity {
   @Column({ type: "int", default: 0 })
   points!: number;
 
+  @Field()
+  @Column({ type: "int", default: 0 })
+  numComments!: number;
+
   @Field(() => Int, { defaultValue: 0 })
   voteStatus: number;
 
@@ -48,6 +53,10 @@ export class Post extends BaseEntity {
 
   @OneToMany(() => Like, (like) => like.post)
   likes: Like[];
+
+  @Field(() => [Comment], { nullable: true })
+  @OneToMany(() => Comment, (comment) => comment.post, { eager: true })
+  comments: Comment[];
 
   @Field(() => String)
   @CreateDateColumn()
